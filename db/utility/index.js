@@ -1,1 +1,3 @@
-exports.formatTopicData = {};
+exports.formatTopicData = insertedTopicData => {
+  return insertedTopicData.reduce((slug, description) => {}, {});
+};
