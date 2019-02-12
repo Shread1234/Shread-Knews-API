@@ -5,7 +5,7 @@ const {
   commentData
 } = require('../data/index');
 
-// const {} = require('../utility/index');
+const { formatArticleData, formatComments } = require('../utility/index');
 
 exports.seed = (knex, Promise) => {
   return knex.migrate
@@ -22,6 +22,15 @@ exports.seed = (knex, Promise) => {
       ])
     )
     .then(([topicsData, usersData]) => {
-      console.log(articleData);
+      const articleTime = formatArticleData(articleData);
+      return knex('articles')
+        .insert(articleTime)
+        .returning('*');
+    })
+    .then((articles) => {
+      const commentsFormat = formatComments(commentData);
+      return knex('comments')
+        .insert(commentsFormat)
+        .returning('*');
     });
 };
