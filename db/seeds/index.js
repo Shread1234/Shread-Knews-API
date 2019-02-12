@@ -5,7 +5,12 @@ const {
   commentData
 } = require('../data/index');
 
-const { formatArticleData, formatComments } = require('../utility/index');
+const {
+  userFormatter,
+  topicFormatter,
+  formatArticleData,
+  formatComments
+} = require('../utility/index');
 
 exports.seed = (knex, Promise) => {
   return knex.migrate
@@ -14,27 +19,28 @@ exports.seed = (knex, Promise) => {
     .then(() =>
       Promise.all([
         knex('topics')
-          .insert(topicData)
+          .insert(topicFormatter(topicData))
           .returning('*'),
         knex('users')
-          .insert(userData)
+          .insert(userFormatter(userData))
           .returning('*')
       ])
     )
     .then(([topicsData, usersData]) => {
-      console.log(usersData);
-      const articleTime = formatArticleData(articleData);
-      return knex('articles')
-        .insert(articleData)
+      const insertArticles = knex('articles')
+        .insert(formatArticleData(articleData, topicsData, usersData))
         .returning('*');
+      return Promise.all([insertArticles, topicsData, usersData]);
     })
-    .then((articles) => {
-      const commentsFormat = formatComments(commentData, articles);
-
-      console.log(commentsFormat);
-      //   return knex('comments')
-      //     .insert(commentsFormat)
-      //     .returning('*');
-      // });
+    .then(([insertArticles, topicsData, usersData]) => {
+      const insertedComments = knex('comments')
+        .insert(formatComments(commentData, insertArticles, usersData))
+        .returning('*');
+      return Promise.all([
+        insertedComments,
+        insertArticles,
+        topicsData,
+        usersData
+      ]);
     });
 };

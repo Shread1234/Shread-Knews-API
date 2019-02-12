@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
     comments.integer('article_id').references('articles.article_id');
     comments.integer('votes').defaultTo(0);
     comments.string('created_at').defaultTo(now.toUTCString());
-    comments.string('body');
+    comments.string('body', 10485760);
   });
 };
 

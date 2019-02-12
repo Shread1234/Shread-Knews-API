@@ -1,28 +1,34 @@
-exports.formatArticleData = (articlesData) => {
-  articlesData.forEach((article) => {
-    const time = article.created_at;
-    article.created_at = new Date(time);
-  });
-  return articlesData;
-};
+exports.topicFormatter = (topicData) =>
+  topicData.map((topic) => ({
+    slug: topic.slug,
+    description: topic.description
+  }));
 
-// this function renaming properties probably isn't right
-exports.formatComments = (commentData, articleData) => {
-  const getArticleID = articleData.find((article) => {
-    return article.author === commentData.belongs_to;
-  });
-  const newComments = commentData.map(({ ...commentDatum }) => {
-    return {
-      body: commentDatum.body,
-      created_at: new Date(commentDatum.created_at),
-      author: commentDatum.created_by,
-      article_id: getArticleID,
-      votes: commentDatum.votes
-    };
-  });
-  return newComments;
-};
+exports.userFormatter = (userData) =>
+  userData.map((user) => ({
+    username: user.username,
+    avatar_url: user.avatar_url,
+    name: user.name
+  }));
 
-// reference article data to user name and topics slug -  reduce?
+exports.formatArticleData = (articlesData, topicData, userData) =>
+  articlesData.map((article) => ({
+    author: userData.find((user) => user.username === article.author).username,
+    title: article.title,
+    body: article.body,
+    votes: article.votes,
+    topic: topicData.find((topic) => topic.slug === article.topic).slug,
+    created_at: new Date(article.created_at)
+  }));
 
-// will need to take in users, topics and articles?
+exports.formatComments = (commentData, articlesData, userData) =>
+  commentData.map((comment) => ({
+    author: userData.find((user) => user.username === comment.created_by)
+      .username,
+    article_id: articlesData.find(
+      (article) => article.article_title === comment.belongs_to
+    ),
+    votes: comment.votes,
+    created_at: new Date(comment.created_at),
+    body: comment.body
+  }));
