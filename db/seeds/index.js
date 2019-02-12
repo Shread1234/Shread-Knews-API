@@ -22,15 +22,16 @@ exports.seed = (knex, Promise) => {
       ])
     )
     .then(([topicsData, usersData]) => {
+      console.log(usersData);
       const articleTime = formatArticleData(articleData);
       return knex('articles')
-        .insert(articleTime)
+        .insert(articleData)
         .returning('*');
     })
     .then((articles) => {
-      // need article ID
-      console.log(articles);
-      //   const commentsFormat = formatComments(commentData);
+      const commentsFormat = formatComments(commentData, articles);
+
+      console.log(commentsFormat);
       //   return knex('comments')
       //     .insert(commentsFormat)
       //     .returning('*');
