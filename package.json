@@ -12,7 +12,8 @@
     "migrate-latest": "knex migrate:latest",
     "migrate-rollback": "knex migrate:rollback",
     "setup-dbs": "psql -f db/setup.sql",
-    "listen-up": "nodemon express/listen.js"
+    "listen-up": "nodemon express/listen.js",
+    "seed-db": "npm run setup-dbs && knex seed:run"
   },
   "repository": {
     "type": "git",

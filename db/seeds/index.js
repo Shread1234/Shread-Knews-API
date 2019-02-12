@@ -3,18 +3,25 @@ const {
   topicData,
   userData,
   commentData
-} = require("../data/index");
+} = require('../data/index');
 
-const { formatTopicData } = require("../utility/index");
+// const {} = require('../utility/index');
 
-exports.seed = (connection, Promise) => {
-  return connection("topics")
-    .insert(topicData)
-    .returning("*")
-    .then(insertedTopicData => {
-      return connection("users")
-        .insert(userData)
-        .returning("*");
-    })
-    .then(insertedUserData => {});
+exports.seed = (knex, Promise) => {
+  return knex.migrate
+    .rollback()
+    .then(() => knex.migrate.latest())
+    .then(() =>
+      Promise.all([
+        knex('topics')
+          .insert(topicData)
+          .returning('*'),
+        knex('users')
+          .insert(userData)
+          .returning('*')
+      ])
+    )
+    .then(([topicsData, usersData]) => {
+      console.log(articleData);
+    });
 };
