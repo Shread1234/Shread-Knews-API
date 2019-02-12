@@ -1,5 +1,3 @@
-// article takes slugs from topic and users for author. Needs to convert a time stamp to readable time
-
 exports.formatArticleData = (articlesData) => {
   articlesData.forEach((article) => {
     const time = article.created_at;
@@ -11,9 +9,21 @@ exports.formatArticleData = (articlesData) => {
 exports.formatComments = (commentData, articleData) => {
   const newComments = commentData.map(({ ...commentDatum }) => {
     return {
-      ...commentDatum,
-      created_at: new Date(commentDatum.created_at)
+      body: commentDatum.body,
+      created_at: new Date(commentDatum.created_at),
+      author: commentDatum.created_by,
+      article_id: commentDatum.belongs_to,
+      votes: commentDatum.votes
     };
   });
   return newComments;
+};
+
+exports.getArticleID = (articles) => {
+  articles.map(({ ...article }) => {
+    return {
+      ...article,
+      article_id: 
+    }
+  });
 };

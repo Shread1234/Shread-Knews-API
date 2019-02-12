@@ -28,9 +28,12 @@ exports.seed = (knex, Promise) => {
         .returning('*');
     })
     .then((articles) => {
-      const commentsFormat = formatComments(commentData);
-      return knex('comments')
-        .insert(commentsFormat)
-        .returning('*');
+      // need article ID
+      console.log(articles);
+      //   const commentsFormat = formatComments(commentData);
+      //   return knex('comments')
+      //     .insert(commentsFormat)
+      //     .returning('*');
+      // });
     });
 };
