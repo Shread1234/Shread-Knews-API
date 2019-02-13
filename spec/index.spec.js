@@ -1,8 +1,9 @@
 process.env.NODE_ENV = 'test';
 const { expect } = require('chai');
-const connection = require('../db/connection');
 const supertest = require('supertest');
+const connection = require('../db/connection');
 const app = require('../express/app');
+
 const request = supertest(app);
 
 describe('/api', () => {
@@ -10,22 +11,20 @@ describe('/api', () => {
   after(() => connection.destroy());
 
   describe('/topics', () => {
-    it('GET topics gives an array of all topics with their slugs and descriptions', () => {
-      return request
+    it('GET topics gives an array of all topics with their slugs and descriptions', () =>
+      request
         .get('/api/topics')
         .expect(200)
         .then(({ body }) => {
           expect(body.topics).to.be.an('array');
-        });
-    });
-    it('GET topics gives an array with keys of slug and description', () => {
-      return request
+        }));
+    it('GET topics gives an array with keys of slug and description', () =>
+      request
         .get('/api/topics')
         .expect(200)
         .then(({ body }) => {
           expect(body.topics[0]).to.contain.keys('slug', 'description');
-        });
-    });
+        }));
     // it('DELETE request on topics endpoint returns a status of 405 and a message of Method Not Allowed', () => {
     //   return request
     //     .delete('/api/topics')
@@ -56,8 +55,8 @@ describe('/api', () => {
     });
   });
   describe('/articles', () => {
-    it('GET articles returns an array of all articles and the keys of author, title, article_id, topic, created_at, votes, body and comment_count', () => {
-      return request
+    it('GET articles returns an array of all articles and the keys of author, title, article_id, topic, created_at, votes, body and comment_count', () =>
+      request
         .get('/api/articles')
         .expect(200)
         .then(({ body }) => {
@@ -71,6 +70,28 @@ describe('/api', () => {
             'votes',
             'body',
             'comment_count'
+          );
+        }));
+    it('POST into articles will insert a new article keys of title, body, topic and username. A success message will be the added article.', () => {
+      const insertedArticle = {
+        title: 'Only for the 1337',
+        body: "If you don't play PUBG, then you're a dirty scrub",
+        topic: 'cats',
+        username: 'butter_bridge'
+      };
+      return request
+        .post('/api/articles')
+        .send(insertedArticle)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.addedArticle).to.contain.keys(
+            ('article_id',
+            'title',
+            'body',
+            'votes',
+            'topic',
+            'author',
+            'created_at')
           );
         });
     });

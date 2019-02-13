@@ -1,4 +1,4 @@
-exports.up = function(knex, Promise) {
+exports.up = function (knex, Promise) {
   const now = new Date(Date.now());
   return knex.schema.createTable('articles', (articles) => {
     articles.increments('article_id').primary();
@@ -17,6 +17,6 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function (knex, Promise) {
   return knex.schema.dropTable('articles');
 };
