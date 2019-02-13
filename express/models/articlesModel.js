@@ -1,6 +1,6 @@
 const connection = require('../../db/connection');
 
-exports.sendArticles = () => connection
+exports.sendArticles = (req = {}) => connection
   .select(
     'articles.author',
     'title',
@@ -11,6 +11,7 @@ exports.sendArticles = () => connection
     'articles.body',
   )
   .from('articles')
+  .where('articles.author', '=', req.author)
   .leftJoin('comments', 'comments.article_id', '=', 'articles.article_id')
   .count('comments.article_id AS comment_count')
   .groupBy(
