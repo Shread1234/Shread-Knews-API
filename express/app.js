@@ -7,6 +7,10 @@ app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
 
+app.use((err, req, res, next) => {
+  console.log(err);
+});
+
 // app.use(handle405);
 
 module.exports = app;

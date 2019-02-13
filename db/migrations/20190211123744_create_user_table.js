@@ -2,10 +2,11 @@ exports.up = function(knex, Promise) {
   return knex.schema.createTable('users', (users) => {
     users
       .string('username')
+      .notNullable()
       .unique()
       .primary();
     users.string('avatar_url');
-    users.string('name');
+    users.string('name').notNullable();
   });
 };
 

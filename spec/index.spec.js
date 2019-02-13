@@ -1,9 +1,9 @@
 process.env.NODE_ENV = 'test';
+const { expect } = require('chai');
+const connection = require('../db/connection');
 const supertest = require('supertest');
 const app = require('../express/app');
 const request = supertest(app);
-const { expect } = require('chai');
-const connection = require('../db/connection');
 
 describe('/api', () => {
   beforeEach(() => connection.seed.run());
@@ -34,7 +34,7 @@ describe('/api', () => {
     //       expect(res.body.msg).to.equal('Method Not Allowed');
     //     });
     // });
-    it('POST into topics will insert a new topic with a slug and description. A success message will be the added topic', () => {
+    it('POST into topics will insert a new topic with a slug and description. A success message will be the added topic.', () => {
       const insertedTopic = {
         slug: 'gaming',
         description: 'Stuff other than FIFA'
@@ -52,6 +52,26 @@ describe('/api', () => {
               expect(body.topics).to.have.lengthOf(3);
               expect(body.topics[2]).to.have.property('slug', 'gaming');
             });
+        });
+    });
+  });
+  describe('/articles', () => {
+    it('GET articles returns an array of all articles and the keys of author, title, article_id, topic, created_at, votes, body and comment_count', () => {
+      return request
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles).to.be.an('array');
+          expect(body.articles[0]).to.contain.keys(
+            'author',
+            'title',
+            'article_id',
+            'topic',
+            'created_at',
+            'votes',
+            'body',
+            'comment_count'
+          );
         });
     });
   });
