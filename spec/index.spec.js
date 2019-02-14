@@ -182,4 +182,19 @@ describe('/api', () => {
           expect(search).to.equal(false);
         })));
   });
+  describe('/articles/:article_id/comments', () => {
+    it('GET on article_id/comments returns all the comments attached to that article with all excluding the article_id', () => request
+      .get('/api/articles/5/comments')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.comments).to.have.lengthOf(2);
+        expect(body.comments[0]).to.contain.keys(
+          'comment_id',
+          'votes',
+          'created_at',
+          'author',
+          'body',
+        );
+      }));
+  });
 });

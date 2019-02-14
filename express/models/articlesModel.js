@@ -54,3 +54,12 @@ exports.removeArticleById = (id) => {
     .where('articles.article_id', '=', searchId)
     .delete();
 };
+
+exports.sendCommentsByArticleId = (id) => {
+  const searchId = id.article_id;
+  return connection
+    .select('comment_id', 'votes', 'created_at', 'author', 'body')
+    .from('comments')
+    .where('comments.article_id', '=', searchId)
+    .returning('*');
+};
