@@ -3,6 +3,7 @@ const {
   addArticle,
   sendArticleById,
   updateArticleById,
+  removeArticleById
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -38,6 +39,15 @@ exports.patchArticleById = (req, res, next) => {
   updateArticleById(id, newVote)
     .then((article) => {
       res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.deleteArticleById = (req, res, next) => {
+  const id = req.params;
+  removeArticleById(id)
+    .then(() => {
+      res.status(204);
     })
     .catch(next);
 };
