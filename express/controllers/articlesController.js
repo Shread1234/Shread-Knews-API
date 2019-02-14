@@ -3,7 +3,7 @@ const {
   addArticle,
   sendArticleById,
   updateArticleById,
-  removeArticleById
+  removeArticleById,
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -47,7 +47,7 @@ exports.deleteArticleById = (req, res, next) => {
   const id = req.params;
   removeArticleById(id)
     .then(() => {
-      res.status(204);
+      res.status(204).send();
     })
     .catch(next);
 };

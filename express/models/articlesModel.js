@@ -23,10 +23,9 @@ exports.sendArticles = (passedQuery) => {
     .orderBy(sort_by, order)
     .returning('*');
 };
-exports.addArticle = (articleToAdd) =>
-  connection('articles')
-    .insert(articleToAdd)
-    .returning('*');
+exports.addArticle = articleToAdd => connection('articles')
+  .insert(articleToAdd)
+  .returning('*');
 
 exports.sendArticleById = (id) => {
   const searchId = id.article_id;
@@ -54,5 +53,4 @@ exports.removeArticleById = (id) => {
   return connection('articles')
     .where('articles.article_id', '=', searchId)
     .delete();
-  //should I be deleting comments as they now reference no article?
 };

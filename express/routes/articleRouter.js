@@ -4,7 +4,7 @@ const {
   postArticle,
   getArticlesById,
   patchArticleById,
-  deleteArticleById
+  deleteArticleById,
 } = require('../controllers/articlesController.js');
 
 articleRouter
