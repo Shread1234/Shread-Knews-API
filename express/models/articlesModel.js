@@ -55,11 +55,23 @@ exports.removeArticleById = (id) => {
     .delete();
 };
 
-exports.sendCommentsByArticleId = (id) => {
+exports.sendCommentsByArticleId = (id, passedQuery) => {
+  const query = {};
   const searchId = id.article_id;
+  let order = 'desc';
+  let sort_by = 'comments.created_at';
+
+  if (passedQuery.order) order = passedQuery.order;
+
+  if (passedQuery.sort_by) sort_by = [`comments.${passedQuery.sort_by}`];
+
+  if (passedQuery.author) query['comments.author'] = passedQuery.author;
+
   return connection
     .select('comment_id', 'votes', 'created_at', 'author', 'body')
     .from('comments')
     .where('comments.article_id', '=', searchId)
+    .orderBy(sort_by, order)
+    .where(query)
     .returning('*');
 };
