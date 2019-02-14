@@ -107,5 +107,21 @@ describe('/api', () => {
           );
           expect(search).to.equal(true);
         }));
+    it('GET articles can take a chained query of topic and author as a filter to only show articles from the topic and author passed in.', () =>
+      request
+        .get('/api/articles?topic=mitch&author=icellusedkars')
+        .expect(200)
+        .then(({ body }) => {
+          const searchTopic = body.articles.every(
+            (article) => article.topic === 'mitch'
+          );
+          expect(searchTopic).to.equal(true);
+
+          const searchAuthor = body.articles.every(
+            (article) => article.author === 'icellusedkars'
+          );
+
+          expect(searchAuthor).to.equal(true);
+        }));
   });
 });
