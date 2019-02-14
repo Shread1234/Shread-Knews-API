@@ -305,4 +305,18 @@ describe('/api', () => {
             })
         ));
   });
+  describe('/users', () => {
+    it('GET request on users endpoint will return all users with the keys of username, avatar_url and name', () =>
+      request
+        .get('/api/users')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.users).to.be.an('array');
+          expect(body.users[0]).to.contain.keys(
+            'username',
+            'avatar_url',
+            'name'
+          );
+        }));
+  });
 });
