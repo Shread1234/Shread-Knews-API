@@ -8,3 +8,11 @@ exports.updateCommentById = (id, newVote) => {
     .increment('votes', voteUpdate)
     .returning('*');
 };
+
+exports.removeCommentById = (id) => {
+  const search_id = id.comment_id;
+  return connection('comments')
+    .where('comments.comment_id', '=', search_id)
+    .delete()
+    .returning('*');
+};
