@@ -197,7 +197,7 @@ describe('/api', () => {
             })
         ));
   });
-  describe('/articles/:article_id/comments', () => {
+  describe.only('/articles/:article_id/comments', () => {
     it('GET on article_id/comments returns all the comments attached to that article with all excluding the article_id', () =>
       request
         .get('/api/articles/5/comments')
@@ -222,6 +222,29 @@ describe('/api', () => {
           );
           expect(search).to.equal(true);
           expect(body.comments).to.have.lengthOf(11);
+        }));
+    it('GET on article_id/comments can take a SORT BY query which sorts by any valid column, and defaults to date if no column is queried', () =>
+      request
+        .get('/api/articles/1/comments')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments[0].created_at).to.equal(
+            '2016-11-22T12:36:03.389+00:00'
+          );
+        }));
+    it('GET on article_id/comments will SORT BY author if the query is passed defaulting to descending', () =>
+      request
+        .get('/api/articles/1/comments?sort_by=author')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments[0].author).to.equal('icellusedkars');
+        }));
+    it('GET on article_id/comments will SORT BY author alphabetically ascending if the query is passed', () =>
+      request
+        .get('/api/articles/1/comments?sortBy=author&order=asc')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.comments[0].author).to.equal('butter_bridge');
         }));
   });
 });
