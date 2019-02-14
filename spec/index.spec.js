@@ -97,5 +97,15 @@ describe('/api', () => {
           );
           expect(search).to.equal(true);
         }));
+    it('GET articles can take a topic query as a filter to only show topics from the topic passed in.', () =>
+      request
+        .get('/api/articles?topic=mitch')
+        .expect(200)
+        .then(({ body }) => {
+          const search = body.articles.every(
+            (article) => article.topic === 'mitch'
+          );
+          expect(search).to.equal(true);
+        }));
   });
 });

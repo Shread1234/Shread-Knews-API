@@ -3,7 +3,7 @@ const connection = require('../../db/connection');
 exports.sendArticles = (query) => {
   const empty = {};
   if (query.author) empty['articles.author'] = query.author;
-  empty;
+  if (query.topic) empty['articles.topic'] = query.topic;
   return connection
     .select('articles.*')
     .from('articles')
