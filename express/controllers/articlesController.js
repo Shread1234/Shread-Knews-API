@@ -1,4 +1,9 @@
-const { sendArticles, addArticle } = require('../models/articlesModel');
+const {
+  sendArticles,
+  addArticle,
+  sendArticleById,
+  updateArticleById,
+} = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
   sendArticles(req.query)
@@ -14,6 +19,25 @@ exports.postArticle = (req, res, next) => {
   addArticle(articleToAdd)
     .then(([addedArticle]) => {
       res.status(201).send({ addedArticle });
+    })
+    .catch(next);
+};
+
+exports.getArticlesById = (req, res, next) => {
+  const id = req.params;
+  sendArticleById(id)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+  const newVote = req.body;
+  const id = req.params;
+  updateArticleById(id, newVote)
+    .then((article) => {
+      res.status(200).send({ article });
     })
     .catch(next);
 };

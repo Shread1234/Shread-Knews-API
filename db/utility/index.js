@@ -22,8 +22,8 @@ exports.formatComments = (commentData, articlesData, userData) => commentData.ma
   author: userData.find(user => user.username === comment.created_by)
     .username,
   article_id: articlesData.find(
-    article => article.article_title === comment.belongs_to,
-  ),
+    article => article.title === comment.belongs_to,
+  ).article_id,
   votes: comment.votes,
   created_at: new Date(comment.created_at),
   body: comment.body,

@@ -6,7 +6,10 @@ exports.up = function (knex, Promise) {
       .string('author')
       .references('users.username')
       .notNullable();
-    comments.integer('article_id').references('articles.article_id');
+    comments
+      .integer('article_id')
+      .references('articles.article_id')
+      .notNullable();
     comments.integer('votes').defaultTo(0);
     comments.string('created_at').defaultTo(now.toUTCString());
     comments.string('body', 10485760).notNullable();
