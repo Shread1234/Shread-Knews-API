@@ -75,3 +75,12 @@ exports.sendCommentsByArticleId = (id, passedQuery) => {
     .where(query)
     .returning('*');
 };
+
+exports.addCommentByArticleId = (id, commentToAdd) => {
+  const article_id = id.article_id;
+  const { author, body } = commentToAdd;
+
+  return connection('comments')
+    .insert({ article_id, author, body })
+    .returning('*');
+};

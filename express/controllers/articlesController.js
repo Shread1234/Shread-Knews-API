@@ -5,6 +5,7 @@ const {
   updateArticleById,
   removeArticleById,
   sendCommentsByArticleId,
+  addCommentByArticleId,
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -59,6 +60,17 @@ exports.getCommentsByArticleId = (req, res, next) => {
   sendCommentsByArticleId(id, query)
     .then((comments) => {
       res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { username, body } = req.body;
+  const commentToAdd = { author: username, body };
+  const id = req.params;
+  addCommentByArticleId(id, commentToAdd)
+    .then((addedComment) => {
+      res.status(201).send({ addedComment });
     })
     .catch(next);
 };

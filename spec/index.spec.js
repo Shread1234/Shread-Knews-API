@@ -197,7 +197,7 @@ describe('/api', () => {
             })
         ));
   });
-  describe.only('/articles/:article_id/comments', () => {
+  describe('/articles/:article_id/comments', () => {
     it('GET on article_id/comments returns all the comments attached to that article with all excluding the article_id', () =>
       request
         .get('/api/articles/5/comments')
@@ -246,5 +246,33 @@ describe('/api', () => {
         .then(({ body }) => {
           expect(body.comments[0].author).to.equal('butter_bridge');
         }));
+    it('POST into article_id/comments will insert a new comment with keys of comment_id, author, article_id, votes, created_at and body. A success message will be the added comment.', () => {
+      const insertedComment = {
+        username: 'butter_bridge',
+        body: 'My username is super original!'
+      };
+      return request
+        .post('/api/articles/5/comments')
+        .send(insertedComment)
+        .expect(201)
+        .then((res) => {
+          expect(res.body.addedComment[0]).to.contain.keys(
+            ('comment_id',
+            'author',
+            'article_id',
+            'votes',
+            'body',
+            'created_at')
+          );
+        })
+        .then(() =>
+          request
+            .get('/api/articles/5/comments')
+            .expect(200)
+            .then(({ body }) => {
+              expect(body.comments).to.have.lengthOf(3);
+            })
+        );
+    });
   });
 });
