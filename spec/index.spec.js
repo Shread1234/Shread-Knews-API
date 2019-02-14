@@ -52,6 +52,7 @@ describe('/api', () => {
         .get('/api/articles')
         .expect(200)
         .then(({ body }) => {
+          // console.log(body);
           expect(body.articles).to.be.an('array');
           expect(body.articles[0]).to.contain.keys(
             'author',
@@ -122,6 +123,29 @@ describe('/api', () => {
           );
 
           expect(searchAuthor).to.equal(true);
+        }));
+    it('GET articles can take a SORT BY query which sorts by any valid column, and defaults to date if no column is queried', () =>
+      request
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[0].created_at).to.equal(
+            '2018-11-15T12:21:54.171+00:00'
+          );
+        }));
+    it('GET articles will SORT BY title if the query is passed defaulting to descending', () =>
+      request
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[0].title).to.equal('Z');
+        }));
+    it('GET articles will SORT BY author alphabetically ascending if the query is passed', () =>
+      request
+        .get('/api/articles?sortBy=author&order=asc')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.articles[0].author).to.equal('butter_bridge');
         }));
   });
 });
