@@ -8,3 +8,12 @@ exports.sendUsers = () => connection
 exports.addUser = userToAdd => connection('users')
   .insert(userToAdd)
   .returning('*');
+
+exports.sendUserById = (userToFind) => {
+  const searchId = userToFind.username;
+  return connection
+    .select('*')
+    .from('users')
+    .where('users.username', '=', searchId)
+    .returning('*');
+};

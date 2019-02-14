@@ -312,5 +312,16 @@ describe('/api', () => {
             });
         });
     });
+    it('GET using the username endpoint will return the user that matches the username passed in the request parameter.', () => request
+      .get('/api/users/butter_bridge')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.user[0].username).to.equal('butter_bridge');
+        expect(body.user[0]).to.contain.keys(
+          'username',
+          'avatar_url',
+          'name',
+        );
+      }));
   });
 });
