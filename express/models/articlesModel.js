@@ -44,7 +44,7 @@ exports.updateArticleById = (id, newVote) => {
   const voteUpdate = newVote.inc_votes;
   return connection('articles')
     .where('articles.article_id', '=', searchId)
-    .update('votes', voteUpdate)
+    .increment('votes', voteUpdate)
     .returning('*');
 };
 
