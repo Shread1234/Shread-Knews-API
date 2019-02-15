@@ -4,7 +4,52 @@
       "GET": "Will return this file you're reading now.",
       "POST": "Not available.",
       "PATCH": "Not available.",
-      "DELETE": "Not available."
+      "DELETE": "Not available.",
+
+      "/topics": {
+        "GET": "Will return an array of all topics.",
+        "POST": "Will allow the user to add a topic with the keys of SLUG and Description.",
+        "PATCH": "Not available.",
+        "DELETE": "Not available."
+      },
+
+      "/articles": {
+        "GET": "Will return an array of all articles with their total comments count. It can take queries of AUTHOR, TOPIC. It can also SORT_BY a valid column which defaults to the CREATED_AT column, ORDER by acsending (ASC) which DEFAULTS to decsending (DESC).",
+        "POST": "Will allow the user to add an article with the keys of TITLE, BODY, TOPIC and USERNAME.",
+        "PATCH": "Not available.",
+        "DELETE": "Not available.",
+
+        "/:article_id": {
+          "GET": "Will return the article that matches the ID passed in the request parameters by the user.",
+          "PATCH": "Will allow a user to increment an article's votes by sending a key of INC_VOTES and an interger value of their vote.",
+          "POST": "Not available.",
+          "DELETE": "Will allow the user to delete an article that matches the ID passed in their request parameters.",
+
+          "/comments": {
+            "GET": "Will return all comments that are linked to the article_id passed in by the users request parameters. It can take queries of ORDER by acsending (ASC) or DEFAULTS to decsending (DESC), SORT_BY a valid column which DEFAULTS to CREATED_AT and can also search for comments by AUTHOR.",
+            "POST": "Will allow a user to post a comment linked to the article_id passed in their request parameters. It will send with the keys of AUTHOR and BODY.",
+            "PATCH": "Not available.",
+            "DELETE": "Not available."
+          }
+        },
+        "/comments": {
+          "/:comment_id": {
+            "GET": "Not available.",
+            "PATCH": "Allows the user to update the VOTES a comment that matches the comment_id passed in their request parameters. It will send with a key of INC_VOTES and a value of their vote.",
+            "POST": "Not Available",
+            "DELETE": "Will allow the user to remove a comment that matches the comment_id passed in their request parameters."
+          }
+        },
+        "/users": {
+          "GET": "Will return an array of all users with their USERNAME, AVATAR_URL and NAME.",
+          "POST": "Will allow the user to add a user with the keys of USERNAME, AVATAR_URL and NAME passed in their request body.",
+          "PATCH": "Not available.",
+          "DELETE": "Not available.",
+          "/:username": {
+            "GET": "Will return an array of user information that matches the username passed in the request paramaters."
+          }
+        }
+      }
     }
   }
 }
