@@ -7,6 +7,50 @@ const endpoints = require('../express/endpoints.json');
 
 const request = supertest(app);
 
+describe('/', () => {
+  it("Any request type will return an ERROR with a status code of 404 as this endpoint doesn't exist. It will also return the same code if anything other than useable endpoints are reqest", () =>
+    request
+      .get('/')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body['Error 404']).to.equal('Page Not Found');
+      })
+      .then(() =>
+        request
+          .get('/randomrubbish')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body['Error 404']).to.equal('Page Not Found');
+          })
+          .then(() =>
+            request
+              .post('/randomrubbish')
+              .send({ stuff: 'test' })
+              .expect(404)
+              .then(({ body }) => {
+                expect(body['Error 404']).to.equal('Page Not Found');
+              })
+          )
+          .then(() =>
+            request
+              .put('/randomrubbish')
+              .send({ test: 'test' })
+              .expect(404)
+              .then(({ body }) => {
+                expect(body['Error 404']).to.equal('Page Not Found');
+              })
+          )
+          .then(() =>
+            request
+              .delete('/randomrubbish')
+              .expect(404)
+              .then(({ body }) => {
+                expect(body['Error 404']).to.equal('Page Not Found');
+              })
+          )
+      ));
+});
+
 describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
