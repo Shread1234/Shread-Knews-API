@@ -1,1 +1,10 @@
-{ "endpoint": "details" }
+{
+  "Available EndPoints": {
+    "/api": {
+      "GET": "Will return this file you're reading now.",
+      "POST": "Not available.",
+      "PATCH": "Not available.",
+      "DELETE": "Not available."
+    }
+  }
+}

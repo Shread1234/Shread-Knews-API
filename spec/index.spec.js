@@ -9,15 +9,14 @@ const request = supertest(app);
 describe('/api', () => {
   beforeEach(() => connection.seed.run());
   after(() => connection.destroy());
-  it('GET on /api endpoint RETURNS as JSON with all available endpoints.', () => {
-    return request
+  it.only('GET on /api endpoint RETURNS as JSON with all available endpoints.', () =>
+    request
       .get('/api')
       .expect(200)
       .then(({ body }) => {
         console.log(body);
-        expect(body).to.have.lengthOf(10);
-      });
-  });
+        expect(body).to.contain.keys('endpoint');
+      }));
 
   describe('/topics', () => {
     it('GET topics gives an array of all topics with their slugs and descriptions', () =>

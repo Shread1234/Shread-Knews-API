@@ -1,9 +1,5 @@
-const { showEndPoints } = require('../models/showEndPoints');
+const endpoints = require('../endpoints.json');
 
 exports.getEndPoints = (req, res, next) => {
-  showEndPoints()
-    .then((file) => {
-      console.log(file);
-    })
-    .catch(next);
+  res.status(200).send(endpoints);
 };
