@@ -8,7 +8,7 @@ const endpoints = require('../express/endpoints.json');
 const request = supertest(app);
 
 describe('/', () => {
-  it("Any request type will return an ERROR with a status code of 404 as this endpoint doesn't exist. It will also return the same code if anything other than useable endpoints are reqest", () =>
+  it("Any request type will return an ERROR with a status code of 404 as this endpoint doesn't exist.", () =>
     request
       .get('/')
       .expect(404)
