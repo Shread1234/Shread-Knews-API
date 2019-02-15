@@ -1,3 +1,6 @@
 node_modules
 knexfile.js
 config
+folder-structure.md 
+README.md 
+.eslintrc.js

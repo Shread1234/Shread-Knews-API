@@ -11,8 +11,8 @@ exports.getUsers = (req, res, next) => {
 exports.postUser = (req, res, next) => {
   const userToAdd = req.body;
   addUser(userToAdd)
-    .then((addedUser) => {
-      res.status(201).send({ addedUser });
+    .then(([user]) => {
+      res.status(201).send({ user });
     })
     .catch(next);
 };
@@ -20,7 +20,7 @@ exports.postUser = (req, res, next) => {
 exports.getUserById = (req, res, next) => {
   const userToFind = req.params;
   sendUserById(userToFind)
-    .then((user) => {
+    .then(([user]) => {
       res.status(200).send({ user });
     })
     .catch(next);

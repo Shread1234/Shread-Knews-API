@@ -5,7 +5,7 @@ const {
   updateArticleById,
   removeArticleById,
   sendCommentsByArticleId,
-  addCommentByArticleId,
+  addCommentByArticleId
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -20,8 +20,8 @@ exports.postArticle = (req, res, next) => {
   const { username, ...articleStuff } = req.body;
   const articleToAdd = { author: username, ...articleStuff };
   addArticle(articleToAdd)
-    .then(([addedArticle]) => {
-      res.status(201).send({ addedArticle });
+    .then(([article]) => {
+      res.status(201).send({ article });
     })
     .catch(next);
 };
@@ -29,7 +29,7 @@ exports.postArticle = (req, res, next) => {
 exports.getArticlesById = (req, res, next) => {
   const id = req.params;
   sendArticleById(id)
-    .then((article) => {
+    .then(([article]) => {
       res.status(200).send({ article });
     })
     .catch(next);
@@ -39,7 +39,7 @@ exports.patchArticleById = (req, res, next) => {
   const newVote = req.body;
   const id = req.params;
   updateArticleById(id, newVote)
-    .then((article) => {
+    .then(([article]) => {
       res.status(200).send({ article });
     })
     .catch(next);
@@ -69,8 +69,8 @@ exports.postCommentByArticleId = (req, res, next) => {
   const commentToAdd = { author: username, body };
   const id = req.params;
   addCommentByArticleId(id, commentToAdd)
-    .then((addedComment) => {
-      res.status(201).send({ addedComment });
+    .then(([comment]) => {
+      res.status(201).send({ comment });
     })
     .catch(next);
 };
