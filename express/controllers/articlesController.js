@@ -5,7 +5,7 @@ const {
   updateArticleById,
   removeArticleById,
   sendCommentsByArticleId,
-  addCommentByArticleId,
+  addCommentByArticleId
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {

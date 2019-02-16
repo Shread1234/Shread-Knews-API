@@ -4,11 +4,13 @@ const {
   postUser,
   getUserById,
 } = require('../controllers/usersController.js');
+const { handle405 } = require('../errors');
 
 usersRouter
   .route('/')
   .get(getUsers)
-  .post(postUser);
+  .post(postUser)
+  .all(handle405);
 
 usersRouter.route('/:username').get(getUserById);
 

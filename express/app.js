@@ -4,7 +4,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const apiRouter = require('./routes/apirouter');
 
-const { handle404 } = require('./errors');
+const { handle400s, handle405 } = require('./errors');
 
 app.use(bodyParser.json());
 
@@ -14,6 +14,6 @@ app.use('/*', (req, res, next) => {
   next({ status: 404 });
 });
 
-app.use(handle404);
+app.use(handle400s);
 
 module.exports = app;

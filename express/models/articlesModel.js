@@ -23,9 +23,10 @@ exports.sendArticles = (passedQuery) => {
     .orderBy(sort_by, order)
     .returning('*');
 };
-exports.addArticle = articleToAdd => connection('articles')
-  .insert(articleToAdd)
-  .returning('*');
+exports.addArticle = (articleToAdd) =>
+  connection('articles')
+    .insert(articleToAdd)
+    .returning('*');
 
 exports.sendArticleById = (id) => {
   const searchId = id.article_id;

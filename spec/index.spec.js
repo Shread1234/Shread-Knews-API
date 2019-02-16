@@ -62,7 +62,22 @@ describe('/api', () => {
         expect(body).eql(endpoints);
       }));
 
+  it('Returns an ERROR with a status code of 404 if an unrecognised endpoint is entered after /api', () =>
+    request
+      .get('/api/randomrubbish')
+      .expect(404)
+      .then(({ body }) => {
+        expect(body['Error 404']).to.equal('Page Not Found');
+      }));
+
   describe('/topics', () => {
+    it('Returns an ERROR with a status code of 404 if an unrecognised endpoint is entered after /topics', () =>
+      request
+        .get('/api/topics/randomrubbish')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body['Error 404']).to.equal('Page Not Found');
+        }));
     it('GET topics gives an array of all topics with their slugs and descriptions', () =>
       request
         .get('/api/topics')
@@ -97,109 +112,196 @@ describe('/api', () => {
             });
         });
     });
-  });
-  describe('/articles', () => {
-    it('GET articles returns an array of all articles and the keys of author, title, article_id, topic, created_at, votes, body and comment_count', () =>
-      request
-        .get('/api/articles')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.articles).to.be.an('array');
-          expect(body.articles[0]).to.contain.keys(
-            'author',
-            'title',
-            'article_id',
-            'topic',
-            'created_at',
-            'votes',
-            'body',
-            'comment_count'
-          );
-        }));
-    it('POST into articles will insert a new article keys of title, body, topic and username. A success message will be the added article.', () => {
-      const insertedArticle = {
-        title: 'Only for the 1337',
-        body: "If you don't play PUBG, then you're a dirty scrub",
-        topic: 'cats',
-        username: 'butter_bridge'
+    it('Returns an ERROR with a status code of 400 if a user inserts a topic with a duplicate SLUG.', () => {
+      const insertedTopic = {
+        slug: 'mitch',
+        description: 'test'
       };
       return request
-        .post('/api/articles')
-        .send(insertedArticle)
-        .expect(201)
-        .then((res) => {
-          expect(res.body.article).to.contain.keys(
-            ('article_id',
-            'title',
-            'body',
-            'votes',
-            'topic',
-            'author',
-            'created_at')
-          );
+        .post('/api/topics/')
+        .send(insertedTopic)
+        .expect(400)
+        .then(({ body }) => {
+          expect(body['Error 400']).to.equal('Unprocessable Entity');
         });
     });
-    it('GET articles can take an author query as a filter to only show articles from the author passed in.', () =>
-      request
-        .get('/api/articles?author=butter_bridge')
-        .expect(200)
+    it('Returns an ERROR with a status code of 400 if a user inserts a topic without the right keys', () => {
+      const insertedTopic = {
+        slug: 'new slug'
+      };
+      return request
+        .post('/api/topics/')
+        .send(insertedTopic)
+        .expect(400)
         .then(({ body }) => {
-          const search = body.articles.every(
-            (article) => article.author === 'butter_bridge'
-          );
-          expect(search).to.equal(true);
-        }));
-    it('GET articles can take a topic query as a filter to only show topics from the topic passed in.', () =>
+          expect(body['Error 400']).to.equal('Unprocessable Entity');
+        });
+    });
+    it('Returns an ERROR with a status code of 405 if an invalid request is made by the user.', () =>
       request
-        .get('/api/articles?topic=mitch')
-        .expect(200)
+        .patch('/api/topics/')
+        .expect(405)
         .then(({ body }) => {
-          const search = body.articles.every(
-            (article) => article.topic === 'mitch'
-          );
-          expect(search).to.equal(true);
-        }));
-    it('GET articles can take a chained query of topic and author as a filter to only show articles from the topic and author passed in.', () =>
-      request
-        .get('/api/articles?topic=mitch&author=icellusedkars')
-        .expect(200)
-        .then(({ body }) => {
-          const searchTopic = body.articles.every(
-            (article) => article.topic === 'mitch'
-          );
-          expect(searchTopic).to.equal(true);
+          expect(body['Error 405']).to.equal('Method Not Allowed');
+        })
+        .then(() =>
+          request
+            .delete('/api/topics')
+            .expect(405)
+            .then(({ body }) => {
+              expect(body['Error 405']).to.equal('Method Not Allowed');
+            })
+        ));
+    describe('/articles', () => {
+      it('Returns an ERROR with a status code of 404 if an unrecognised endpoint is entered after /articles', () =>
+        request
+          .get('/api/articles/randomrubbish')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body['Error 404']).to.equal('Page Not Found');
+          }));
+      it('Returns an ERROR with a status code of 405 if an unrecognised method is used on /articles', () =>
+        request
+          .patch('/api/articles')
+          .send('something')
+          .expect(405)
+          .then(({ body }) => {
+            expect(body['Error 405']).to.equal('Method Not Allowed');
+          })
+          .then(() =>
+            request
+              .delete('/api/articles')
+              .expect(405)
+              .then(({ body }) => {
+                expect(body['Error 405']).to.equal('Method Not Allowed');
+              })
+          ));
+      it('GET articles returns an array of all articles and the keys of author, title, article_id, topic, created_at, votes, body and comment_count', () =>
+        request
+          .get('/api/articles')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles).to.be.an('array');
+            expect(body.articles[0]).to.contain.keys(
+              'author',
+              'title',
+              'article_id',
+              'topic',
+              'created_at',
+              'votes',
+              'body',
+              'comment_count'
+            );
+          }));
+      it('POST into articles will insert a new article keys of title, body, topic and username. A success message will be the added article.', () => {
+        const insertedArticle = {
+          title: 'Only for the 1337',
+          body: "If you don't play PUBG, then you're a dirty scrub",
+          topic: 'cats',
+          username: 'butter_bridge'
+        };
+        return request
+          .post('/api/articles')
+          .send(insertedArticle)
+          .expect(201)
+          .then((res) => {
+            expect(res.body.article).to.contain.keys(
+              ('article_id',
+              'title',
+              'body',
+              'votes',
+              'topic',
+              'author',
+              'created_at')
+            );
+          });
+      });
+      it('GET articles can take an author query as a filter to only show articles from the author passed in.', () =>
+        request
+          .get('/api/articles?author=butter_bridge')
+          .expect(200)
+          .then(({ body }) => {
+            const search = body.articles.every(
+              (article) => article.author === 'butter_bridge'
+            );
+            expect(search).to.equal(true);
+          }));
+      it('GET articles can take a topic query as a filter to only show topics from the topic passed in.', () =>
+        request
+          .get('/api/articles?topic=mitch')
+          .expect(200)
+          .then(({ body }) => {
+            const search = body.articles.every(
+              (article) => article.topic === 'mitch'
+            );
+            expect(search).to.equal(true);
+          }));
+      it('GET articles can take a chained query of topic and author as a filter to only show articles from the topic and author passed in.', () =>
+        request
+          .get('/api/articles?topic=mitch&author=icellusedkars')
+          .expect(200)
+          .then(({ body }) => {
+            const searchTopic = body.articles.every(
+              (article) => article.topic === 'mitch'
+            );
+            expect(searchTopic).to.equal(true);
 
-          const searchAuthor = body.articles.every(
-            (article) => article.author === 'icellusedkars'
-          );
+            const searchAuthor = body.articles.every(
+              (article) => article.author === 'icellusedkars'
+            );
 
-          expect(searchAuthor).to.equal(true);
-        }));
-    it('GET articles can take a SORT BY query which sorts by any valid column, and defaults to date if no column is queried', () =>
-      request
-        .get('/api/articles')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.articles[0].created_at).to.equal(
-            '2018-11-15T12:21:54.171+00:00'
-          );
-        }));
-    it('GET articles will SORT BY title if the query is passed defaulting to descending', () =>
-      request
-        .get('/api/articles?sort_by=title')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.articles[0].title).to.equal('Z');
-        }));
-    it('GET articles will SORT BY author alphabetically ascending if the query is passed', () =>
-      request
-        .get('/api/articles?sortBy=author&order=asc')
-        .expect(200)
-        .then(({ body }) => {
-          expect(body.articles[0].author).to.equal('butter_bridge');
-        }));
-  });
-  describe('/articles/:article_id', () => {
+            expect(searchAuthor).to.equal(true);
+          }));
+      it('GET articles can take a SORT BY query which sorts by any valid column, and defaults to date if no column is queried', () =>
+        request
+          .get('/api/articles')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].created_at).to.equal(
+              '2018-11-15T12:21:54.171+00:00'
+            );
+          }));
+      it('GET articles can take a SORT BY query which ignores invalid columns', () =>
+        request
+          .get('/api/articles?sort_by=testcolumn')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].created_at).to.equal(
+              '2018-11-15T12:21:54.171+00:00'
+            );
+          }));
+      it('GET articles will SORT BY title if the query is passed defaulting to descending', () =>
+        request
+          .get('/api/articles?sort_by=title')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].title).to.equal('Z');
+          }));
+      it('GET articles will SORT BY author alphabetically ascending if the query is passed', () =>
+        request
+          .get('/api/articles?sort_by=author&order=asc')
+          .expect(200)
+          .then(({ body }) => {
+            expect(body.articles[0].author).to.equal('butter_bridge');
+          }));
+    });
+    describe('/articles/:article_id', () => {
+      it('Returns an ERROR with a status code of 404 if an unrecognised article_id is entered after /articles', () =>
+        request
+          .get('/api/articles/900')
+          .expect(404)
+          .then(({ body }) => {
+            expect(body['Error 404']).to.equal('Page Not Found');
+          })
+          .then(() => {
+            request
+              .get('/api/articles/rubbish')
+              .expect(400)
+              .then(({ body }) => {
+                expect(body['Error 400']).to.equal('unproceeasable Entity');
+              });
+          }));
+    });
     it('GET using the article_id endpoint will return the article that matches the ID passed in the request parameter. It will also include a comment_count key', () =>
       request
         .get('/api/articles/6')
