@@ -4,7 +4,7 @@ const {
   postUser,
   getUserById,
 } = require('../controllers/usersController.js');
-const { handle405 } = require('../errors');
+const { handle405 } = require('../errors/index');
 
 usersRouter
   .route('/')

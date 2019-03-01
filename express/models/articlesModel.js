@@ -9,9 +9,20 @@ exports.sendArticles = (passedQuery) => {
 
   if (passedQuery.topic) query['articles.topic'] = passedQuery.topic;
 
-  if (passedQuery.sort_by) sort_by = [`articles.${passedQuery.sort_by}`];
+  if (passedQuery.sort_by) sort_by = `articles.${passedQuery.sort_by}`;
 
   if (passedQuery.order) order = passedQuery.order;
+
+  const articleLookup = [
+    'articles.article_id',
+    'articles.title',
+    'articles.body',
+    'articles.votes',
+    'articles.topic',
+    'articles.author',
+  ];
+
+  if (articleLookup.includes(sort_by) === false) sort_by = 'articles.created_at';
 
   return connection
     .select('articles.*')
@@ -23,10 +34,9 @@ exports.sendArticles = (passedQuery) => {
     .orderBy(sort_by, order)
     .returning('*');
 };
-exports.addArticle = (articleToAdd) =>
-  connection('articles')
-    .insert(articleToAdd)
-    .returning('*');
+exports.addArticle = articleToAdd => connection('articles')
+  .insert(articleToAdd)
+  .returning('*');
 
 exports.sendArticleById = (id) => {
   const searchId = id.article_id;
@@ -43,6 +53,7 @@ exports.sendArticleById = (id) => {
 exports.updateArticleById = (id, newVote) => {
   const searchId = id.article_id;
   const voteUpdate = newVote.inc_votes;
+
   return connection('articles')
     .where('articles.article_id', '=', searchId)
     .increment('votes', voteUpdate)

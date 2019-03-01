@@ -3,6 +3,12 @@ const connection = require('../../db/connection');
 exports.updateCommentById = (id, newVote) => {
   const comment_id = id.comment_id;
   const voteUpdate = newVote.inc_votes;
+
+  if (typeof voteUpdate !== 'number') {
+    return connection('comments')
+      .where('comments.comment_id', '=', comment_id)
+      .returning('*');
+  }
   return connection('comments')
     .where('comments.comment_id', '=', comment_id)
     .increment('votes', voteUpdate)

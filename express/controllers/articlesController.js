@@ -5,7 +5,7 @@ const {
   updateArticleById,
   removeArticleById,
   sendCommentsByArticleId,
-  addCommentByArticleId
+  addCommentByArticleId,
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -30,7 +30,10 @@ exports.getArticlesById = (req, res, next) => {
   const id = req.params;
   sendArticleById(id)
     .then(([article]) => {
-      res.status(200).send({ article });
+      if (article === undefined) {
+        const err = { status: 404 };
+        next(err);
+      } else res.status(200).send({ article });
     })
     .catch(next);
 };
@@ -38,11 +41,16 @@ exports.getArticlesById = (req, res, next) => {
 exports.patchArticleById = (req, res, next) => {
   const newVote = req.body;
   const id = req.params;
-  updateArticleById(id, newVote)
-    .then(([article]) => {
-      res.status(200).send({ article });
-    })
-    .catch(next);
+  if (typeof newVote.inc_votes !== 'number') {
+    const err = { status: 400 };
+    next(err);
+  } else {
+    updateArticleById(id, newVote)
+      .then(([article]) => {
+        res.status(200).send({ article });
+      })
+      .catch(next);
+  }
 };
 
 exports.deleteArticleById = (req, res, next) => {

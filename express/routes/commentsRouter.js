@@ -3,7 +3,7 @@ const {
   patchCommentById,
   deleteCommentById,
 } = require('../controllers/commentsController.js');
-const { handle405 } = require('../errors');
+const { handle405 } = require('../errors/index');
 
 commentsRouter
   .route('/:comment_id')

@@ -1,6 +1,6 @@
 const topicsRouter = require('express').Router();
 const { getTopics, postTopic } = require('../controllers/topicsController.js');
-const { handle405 } = require('../errors');
+const { handle405 } = require('../errors/index');
 
 topicsRouter
   .route('/')

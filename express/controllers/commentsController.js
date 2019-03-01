@@ -6,9 +6,13 @@ const {
 exports.patchCommentById = (req, res, next) => {
   const newVote = req.body;
   const id = req.params;
+
   updateCommentById(id, newVote)
     .then(([comment]) => {
-      res.status(200).send({ comment });
+      if (!comment) {
+        const err = { status: 404 };
+        next(err);
+      } else res.status(200).send({ comment });
     })
     .catch(next);
 };
