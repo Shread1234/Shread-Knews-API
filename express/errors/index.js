@@ -1,7 +1,7 @@
 exports.handle400s = (err, req, res, next) => {
   if (err.status === 404) {
     return res.status(404).send({
-      'Error 404': err.msg || 'Page Not Found'
+      'Error 404': err.msg || 'Page Not Found',
     });
   }
   if (err.code === '23505') {
@@ -18,6 +18,6 @@ exports.handle405 = (req, res) => {
 
 exports.handle500 = (err, req, res, next) => {
   res.status(500).send({
-    'Error 500': 'Internal Server Error'
+    'Error 500': 'Internal Server Error',
   });
 };
