@@ -9,9 +9,9 @@ const dbconfig =
 
 module.exports = require('knex')(dbconfig);
 
-const knex = require('knex');
-const dbconfig = require('../knexfile.js');
+// const knex = require('knex');
+// const dbconfig = require('../knexfile.js');
 
-const connection = knex(dbconfig);
+// const connection = knex(dbconfig);
 
-module.exports = connection;
+// module.exports = connection;
