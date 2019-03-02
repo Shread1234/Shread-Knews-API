@@ -5,7 +5,7 @@ const {
   updateArticleById,
   removeArticleById,
   sendCommentsByArticleId,
-  addCommentByArticleId,
+  addCommentByArticleId
 } = require('../models/articlesModel');
 
 exports.getArticles = (req, res, next) => {
@@ -42,7 +42,7 @@ exports.patchArticleById = (req, res, next) => {
   const newVote = req.body;
   const id = req.params;
   if (typeof newVote.inc_votes !== 'number') {
-    const err = { status: 400 };
+    const err = { status: 400, msg: 'Your Vote Must Be A Number' };
     next(err);
   } else {
     updateArticleById(id, newVote)
@@ -56,7 +56,11 @@ exports.patchArticleById = (req, res, next) => {
 exports.deleteArticleById = (req, res, next) => {
   const id = req.params;
   removeArticleById(id)
-    .then(() => {
+    .then((body) => {
+      if (body.length === 0) {
+        const err = { status: 404, msg: 'Invalid Article ID' };
+        next(err);
+      }
       res.status(204).send();
     })
     .catch(next);
@@ -67,7 +71,12 @@ exports.getCommentsByArticleId = (req, res, next) => {
   const query = req.query;
   sendCommentsByArticleId(id, query)
     .then((comments) => {
-      res.status(200).send({ comments });
+      if (comments.length === 0) {
+        const err = { status: 404, msg: 'No Comments Found' };
+        next(err);
+      } else {
+        res.status(200).send({ comments });
+      }
     })
     .catch(next);
 };
