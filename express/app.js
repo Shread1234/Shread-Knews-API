@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors')l
+const cors = require('cors');
 const apiRouter = require('./routes/apirouter');
 
 const { handle400s, handle405, handle500 } = require('./errors');
@@ -14,7 +14,7 @@ app.use('/api', apiRouter);
 
 app.all('/*', (req, res) => {
   res.status(404).send({
-    'Error 404': 'Page Not Found',
+    'Error 404': 'Page Not Found'
   });
 });
 
