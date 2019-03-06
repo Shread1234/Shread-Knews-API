@@ -21,11 +21,10 @@ exports.sendArticles = (passedQuery) => {
     'articles.votes',
     'articles.topic',
     'articles.author',
-    'articles.comment_count'
+    'articles.comment_count',
   ];
 
-  if (articleLookup.includes(sort_by) === false)
-    sort_by = 'articles.created_at';
+  if (articleLookup.includes(sort_by) === false) sort_by = 'articles.created_at';
 
   if (sort_by === 'articles.comment_count') sort_by = 'comment_count';
 
@@ -39,10 +38,9 @@ exports.sendArticles = (passedQuery) => {
     .orderBy(sort_by, order)
     .returning('*');
 };
-exports.addArticle = (articleToAdd) =>
-  connection('articles')
-    .insert(articleToAdd)
-    .returning('*');
+exports.addArticle = articleToAdd => connection('articles')
+  .insert(articleToAdd)
+  .returning('*');
 
 exports.sendArticleById = (id) => {
   const searchId = id.article_id;

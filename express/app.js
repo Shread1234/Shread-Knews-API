@@ -1,4 +1,5 @@
 const express = require('express');
+
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -14,7 +15,7 @@ app.use('/api', apiRouter);
 
 app.all('/*', (req, res) => {
   res.status(404).send({
-    'Error 404': 'Page Not Found'
+    'Error 404': 'Page Not Found',
   });
 });
 

@@ -13,7 +13,7 @@ exports.up = function (knex, Promise) {
       .string('author')
       .references('users.username')
       .notNullable();
-    articles.string('created_at').defaultTo(now.toUTCString());
+    articles.string('created_at').defaultTo(knex.fn.now());
   });
 };
 
