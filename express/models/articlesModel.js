@@ -13,6 +13,7 @@ exports.sendArticles = (passedQuery) => {
 
   if (passedQuery.order) order = passedQuery.order;
 
+  // valid look up for sorting
   const articleLookup = [
     'articles.article_id',
     'articles.title',
