@@ -2,6 +2,10 @@
 
 This project was built a part of a test during my time at the Northcoders full stack bootcamp, to test my understanding of SQL, RESTful APIs and Node.js.
 
+Hosted on Heroku: https://shread-knews.herokuapp.com/api
+
+Best viewed with a JSON viewer extension.
+
 ## Prerequisites
 
 ---
