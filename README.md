@@ -53,6 +53,7 @@ These tests will use SuperTest, Mocha and Chai to send requests to the API on a 
 Node.js
 Express.js
 Knex.js
+PostgreSQL
 Cores-js
 Heroku
 ```
