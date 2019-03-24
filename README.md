@@ -43,7 +43,7 @@ To run the tests enter the following into your terminal, ensuring you are in the
 npm test
 ```
 
-These tests will use SuperTest to send requests to the API on a get, post, patch and delete basis to ensure the API endpoints are acting as desired.
+These tests will use SuperTest, Mocha and Chai to send requests to the API on a get, post, patch and delete basis to ensure the API endpoints are acting as desired.
 
 ## Built With
 
