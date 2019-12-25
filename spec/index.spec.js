@@ -360,7 +360,7 @@ describe('/api', () => {
               'body',
             );
           }));
-        it('GET on article_id/comments can take a query as a filter to only show comments from the columun passed in the request query.', () => request
+        it('GET on article_id/comments can take a query as a filter to only show comments from the column passed in the request query.', () => request
           .get('/api/articles/1/comments?author=icellusedkars')
           .expect(200)
           .then(({ body }) => {
@@ -385,7 +385,7 @@ describe('/api', () => {
             expect(body.comments[0].author).to.equal('icellusedkars');
           }));
         it('GET on article_id/comments will SORT BY author alphabetically ascending if the query is passed.', () => request
-          .get('/api/articles/1/comments?sortBy=author&order=asc')
+          .get('/api/articles/1/comments?sort_by=author&order=asc')
           .expect(200)
           .then(({ body }) => {
             expect(body.comments[0].author).to.equal('butter_bridge');

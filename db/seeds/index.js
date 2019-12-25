@@ -12,7 +12,7 @@ const {
   formatComments,
 } = require('../utility/index');
 
-exports.seed = (knex, Promise) => knex.migrate
+exports.seed = knex => knex.migrate
   .rollback()
   .then(() => knex.migrate.latest())
   .then(() => Promise.all([

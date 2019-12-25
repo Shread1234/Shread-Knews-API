@@ -15,14 +15,14 @@ const dbConfig = {
   test: {
     connection: {
       database: 'fake_news',
-      user: 'shread',
+      user: 'jamiemain',
       password: 'password',
     },
   },
   development: {
     connection: {
       database: 'news',
-      user: 'shread',
+      user: 'jamiemain',
       password: 'password',
     },
   },

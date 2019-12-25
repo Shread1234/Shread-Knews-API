@@ -24,7 +24,7 @@ exports.sendArticles = (passedQuery) => {
     'articles.comment_count',
   ];
 
-  if (articleLookup.includes(sort_by) === false) sort_by = 'articles.created_at';
+  if (!articleLookup.includes(sort_by)) sort_by = 'articles.created_at';
 
   if (sort_by === 'articles.comment_count') sort_by = 'comment_count';
 
@@ -77,9 +77,9 @@ exports.sendCommentsByArticleId = (id, passedQuery) => {
   let order = 'desc';
   let sort_by = 'comments.created_at';
 
-  if (passedQuery.order) order = passedQuery.order;
+  if (passedQuery.order) order = `${passedQuery.order}`;
 
-  if (passedQuery.sort_by) sort_by = [`comments.${passedQuery.sort_by}`];
+  if (passedQuery.sort_by) sort_by = `comments.${passedQuery.sort_by}`;
 
   if (passedQuery.author) query['comments.author'] = passedQuery.author;
 

@@ -3,3 +3,4 @@ config
 folder-structure.md 
 README.md 
 .eslintrc.js
+.vscode
